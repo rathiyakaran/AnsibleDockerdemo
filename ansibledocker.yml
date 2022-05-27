@@ -1,0 +1,11 @@
+- hosts: webserver
+  become: true
+  tasks:
+  - name: start docker
+    service: name=docker state=started
+  - name: clone the repo on the host
+    git: https://github.com/rathiyakaran/AnsibleDockerdemo.git dest=/tmp/gitrepo
+  - name: build the image
+    command: chdir=/tmp/gitrepo docker build -t myimage .
+  - name: Run the image for deploying the war file
+    command: docker run -d -P myimage
